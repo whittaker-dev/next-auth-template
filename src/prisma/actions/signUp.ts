@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { IPayloadSignUp } from "./interface/auth.interface";
 
 export const signUp = async (payload: IPayloadSignUp) => {

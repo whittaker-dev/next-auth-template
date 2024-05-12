@@ -107,7 +107,7 @@ const FormSignUpEmail = (props: Props) => {
   });
 
   return (
-    <div className="w-1/2 bg-white p-8 rounded-lg relative">
+    <div className="w-full bg-white p-8 rounded-lg relative">
       <div
         className="absolute top-0 left-0 bg-green-primary h-3 rounded-tl-lg rounded-tr-lg"
         style={{

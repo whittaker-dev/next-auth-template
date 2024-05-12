@@ -1,8 +1,8 @@
+import "./globals.css";
 import { EdgeStoreProvider } from "@/lib/edgstore";
 import { NextUIProvider } from "@/providers/NextUIProvider";
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
-import "./globals.css";
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",

@@ -4,40 +4,50 @@ import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { db } from "./lib/db";
-async function getUser(email: string, password: string): Promise<any> {
-  return {
-    id: 1,
-    name: "test user",
-    email: email,
-    password: password,
-  };
-}
+import bcrypt from "bcryptjs";
+import { AdapterAccount } from "next-auth/adapters";
+
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  pages: {
+    signIn: "/sign-in",
+  },
   providers: [
     GitHub,
     Google,
     Credentials({
+      id: "credentials",
       name: "credentials",
       credentials: {
         email: { label: "email", type: "text" },
         password: { label: "password", type: "password" },
       },
       async authorize(credentials) {
-        console.log({ credentials });
+        const { email, password } = credentials;
 
-        const user = await getUser(
-          credentials.email as string,
-          credentials.password as string
+        const user = await db.user.findUnique({
+          where: { email: email as string },
+        });
+
+        const isValidPassword = await bcrypt.compare(
+          String(password),
+          user?.password as string
         );
-        return user;
+
+        if (isValidPassword) {
+          return user;
+        }
+
+        return null;
       },
     }),
   ],
   callbacks: {
     async session({ session, token }) {
-      console.log({ session, token });
-
+      session.user = token as any;
       return session;
+    },
+    async jwt({ token, user }) {
+      return { ...token, ...user };
     },
   },
   session: { strategy: "jwt" },

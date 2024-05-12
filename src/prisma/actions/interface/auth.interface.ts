@@ -6,3 +6,8 @@ export interface IPayloadSignUp {
   password: string;
   passwordConfirm: string;
 }
+
+export interface IPayloadSignIn {
+  email: string;
+  password: string;
+}

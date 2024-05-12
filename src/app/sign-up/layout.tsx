@@ -1,3 +1,4 @@
+import AuthLayout from "@/layouts/AuthLayout";
 import WithoutHeaderLayout from "@/layouts/WithoutHeaderLayout";
 import React from "react";
 
@@ -6,7 +7,11 @@ type Props = {
 };
 
 const SignUpLayout = ({ children }: Props) => {
-  return <WithoutHeaderLayout>{children}</WithoutHeaderLayout>;
+  return (
+    <WithoutHeaderLayout>
+      <AuthLayout>{children}</AuthLayout>
+    </WithoutHeaderLayout>
+  );
 };
 
 export default SignUpLayout;

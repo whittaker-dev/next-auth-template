@@ -1,12 +1,14 @@
+import { auth } from "@/auth";
 import { routerName } from "@/constant";
-import { Input } from "@nextui-org/react";
+import { signOutAction } from "@/prisma/actions/signOut";
+import { Button, Input } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 type Props = {};
 
-const Header = (props: Props) => {
+const Header = async (props: Props) => {
+  const session = await auth();
   return (
     <header className="fixed left-0 right-0 top-0 z-[9999] bg-green-primary-200 px-[5%] lg:px-[10%] py-4 flex items-center justify-between border-b border-solid border-b-slate-200">
       <div className="flex items-center justify-start gap-6">
@@ -57,12 +59,20 @@ const Header = (props: Props) => {
         >
           Log in
         </Link>
-        <Link href={routerName.signUp} className="group bg-green-primary-600 size-full block rounded-md">
+        <Link
+          href={routerName.signUp}
+          className="group bg-green-primary-600 size-full block rounded-md"
+        >
           <span className="block px-3 py-2 rounded-md bg-white border-2 border-solid border-green-primary-600 text-sm font-bold text-green-primary-600 transition-all -translate-y-1 -translate-x-1 group-active:translate-x-0 group-active:translate-y-0">
             Create account
           </span>
         </Link>
       </div>
+      {session && (
+        <form action={signOutAction}>
+          <Button type="submit">Logout</Button>
+        </form>
+      )}
     </header>
   );
 };
