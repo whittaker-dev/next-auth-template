@@ -12,8 +12,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     signIn: "/sign-in",
   },
   providers: [
-    GitHub,
-    Google,
+    GitHub({
+      clientId: process.env.AUTH_GITHUB_ID,
+      clientSecret: process.env.AUTH_GITHUB_SECRET,
+    }),
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+    }),
     Credentials({
       id: "credentials",
       name: "credentials",
@@ -43,13 +49,21 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     async session({ session, token }) {
+      console.log({ token });
       session.user = token as any;
       return session;
     },
     async jwt({ token, user }) {
       return { ...token, ...user };
     },
+    signIn({ account, user, credentials, profile }) {
+      console.log({ account, user, credentials, profile });
+      if (account?.provider === "github") {
+        console.log("user id", profile?.id);
+      }
+      return true;
+    },
   },
   session: { strategy: "jwt" },
-  adapter: PrismaAdapter(db),
+  // adapter: PrismaAdapter(db),
 });

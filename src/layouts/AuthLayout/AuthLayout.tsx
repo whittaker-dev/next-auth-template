@@ -15,14 +15,14 @@ const AuthLayout = ({ children }: Props) => {
     return pathname === routerName.signIn;
   }, [pathname]);
   return (
-    <div className="flex items-center justify-center flex-col bg-green-primary-400 py-20">
+    <div className="flex items-center justify-center flex-col bg-green-primary-400 py-10 lg:py-20">
       <div className="relative w-24 h-12">
         <Image src={"/images/logo-app.png"} alt="logo-app" fill />
       </div>
-      <h4 className="text-3xl font-bold text-dark-primary mt-8 mb-2 text-center">
+      <h4 className="text-2xl lg:text-3xl font-bold text-dark-primary mt-8 mb-2 text-center">
         Join the TrySomeThign Community
       </h4>
-      <p className="text-lg font-normal text-dark-primary text-center">
+      <p className="text-medium lg:text-lg font-normal text-dark-primary text-center">
         TrySomeThign Community is a community of <br /> 1,446,322 amazing
         developers
       </p>
@@ -30,7 +30,7 @@ const AuthLayout = ({ children }: Props) => {
         {children}
       </div>
 
-      <div className="mt-12 text-sm font-medium text-gray-400 italic text-center">
+      <div className="mt-12 text-xs lg:text-sm font-medium text-gray-400 italic text-center">
         By signing up, you are agreeing to our <br />{" "}
         <Link href={"#"} className="text-blue-700">
           privacy policy terms of use
@@ -42,7 +42,7 @@ const AuthLayout = ({ children }: Props) => {
       </div>
       <Divider style={{ width: "30%", margin: "20px 0" }} />
 
-      <div className="text-sm font-medium text-dark-primary">
+      <div className="text-xs lg:text-sm font-medium text-dark-primary">
         {isSignInPage
           ? `New to ${appName} Community?`
           : "Already have an account?"}{" "}

@@ -136,7 +136,7 @@ const FormSignUpEmail = (props: Props) => {
           </label>
           <input
             type="file"
-            className="dy-file-input dy-file-input-bordered w-full max-w-lg"
+            className="dy-file-input dy-file-input-bordered w-full max-w-lg text-sm lg:text-lg"
             onChange={handleChangeImage}
             accept="image/*"
           />
