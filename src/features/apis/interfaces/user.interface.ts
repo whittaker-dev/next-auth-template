@@ -3,7 +3,10 @@ export enum ERoleUser {
   Admin = "Admin",
 }
 
+export interface IPayloadUpdateUser extends Partial<IUser> {}
+
 export interface IUser {
+  id: string;
   name: string;
   displayName: string;
   userName: string;

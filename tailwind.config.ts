@@ -1,3 +1,4 @@
+import { nextui } from "@nextui-org/react";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -25,8 +26,8 @@ const config: Config = {
         montserrat: ["var(--font-montserrat)"],
       },
       colors: {
-        "black": "#000",
-        "white": "#fff",
+        black: "#000",
+        white: "#fff",
         "dark-primary": "#1F2B24",
         "gray-charade": "#2C2F3A",
         "deep-cove": "#050A44",
@@ -45,5 +46,7 @@ const config: Config = {
       },
     },
   },
+  darkMode: "class",
+  plugins: [nextui()],
 };
 export default config;

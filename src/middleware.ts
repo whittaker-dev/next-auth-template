@@ -10,7 +10,6 @@ import {
 
 export default auth((req) => {
   const { nextUrl } = req;
-  console.log(">>>> Req auth", req.auth);
 
   const isLoggedIn = !!req.auth;
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);

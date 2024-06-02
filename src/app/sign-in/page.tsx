@@ -2,7 +2,7 @@
 import ButtonAuthSocial from "@/components/ButtonAuthSocial";
 import { ETypeAuthSocial } from "@/components/ButtonAuthSocial/ButtonAuthSocial";
 import { signInAction } from "@/features/auth/signIn";
-import { IPayloadSignIn } from "@/lib/interfaces";
+import { IPayloadSignIn } from "@/features/apis/interfaces";
 import { IError } from "@/utils/shared/interface";
 import { Button, Input, Spinner } from "@nextui-org/react";
 import { useFormik } from "formik";

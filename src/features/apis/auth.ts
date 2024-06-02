@@ -1,11 +1,15 @@
 import { apiClient } from "@/app/api/axios";
-import { IPayloadSignIn, IPayloadSignUp, IUser } from "@/lib/interfaces";
+import {
+  IPayloadSignIn,
+  IPayloadSignUp,
+  IUser,
+} from "@/features/apis/interfaces";
 
 class AuthApi {
   async signUp(payload: IPayloadSignUp): Promise<IUser> {
     try {
-      const newUser = await apiClient.post(`/auth/sign-up`, payload);
-      return newUser;
+      const data = await apiClient.post(`/auth/sign-up`, payload);
+      return data.user;
     } catch (error) {
       throw error;
     }

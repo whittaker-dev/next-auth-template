@@ -3,3 +3,9 @@ export interface IError {
   stack?: string;
   status?: string;
 }
+
+export interface IFileUpload {
+  name: string;
+  extension: string;
+  type: string;
+}

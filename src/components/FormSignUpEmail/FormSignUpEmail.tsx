@@ -3,6 +3,7 @@ import { routerName } from "@/constants";
 import { Button, Input, Spinner } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
+import InputFileUpload from "../InputFileUpload";
 import useFormSignUpEmail from "./hook";
 
 type Props = {};
@@ -14,10 +15,11 @@ const FormSignUpEmail = (props: Props) => {
     uploadImageProgress,
     isVisiblePasswordConfirm,
     loading,
-    error,
+    avatarPreview,
     toggleVisibilityPwd,
     toggleVisibilityPwdConfirm,
     handleChangeImage,
+    handleRemoveImage,
   } = useFormSignUpEmail();
 
   return (
@@ -45,14 +47,15 @@ const FormSignUpEmail = (props: Props) => {
       <form onSubmit={formik.handleSubmit}>
         {/* ===== PROFILE IMAGE ===== */}
         <div className="">
-          <label className="block text-sm font-medium text-dark-primary mb-2">
+          <label className="block text-sm font-semibold text-dark-primary mb-2">
             Profile image
           </label>
-          <input
-            type="file"
-            className="dy-file-input dy-file-input-bordered w-full max-w-lg text-sm lg:text-lg"
-            onChange={handleChangeImage}
-            accept="image/*"
+
+          <InputFileUpload
+            idInput="sign-up-input-avatar"
+            urlPreview={avatarPreview}
+            handleChangeImage={handleChangeImage}
+            handleRemoveImage={handleRemoveImage}
           />
           {formik.errors.avatar && (
             <p className="text-[12px] font-medium text-red-700 mt-2">
@@ -63,7 +66,7 @@ const FormSignUpEmail = (props: Props) => {
 
         {/* ===== NAME ===== */}
         <div className="mt-6">
-          <label className="block text-sm font-medium text-dark-primary mb-2">
+          <label className="block text-sm font-semibold text-dark-primary mb-2">
             Name <span className="text-green-primary">*</span>
           </label>
           <Input
@@ -92,7 +95,7 @@ const FormSignUpEmail = (props: Props) => {
 
         {/* ===== USER NAME ===== */}
         <div className="mt-6">
-          <label className="block text-sm font-medium text-dark-primary mb-2">
+          <label className="block text-sm font-semibold text-dark-primary mb-2">
             User name <span className="text-green-primary">*</span>
           </label>
           <Input
@@ -121,7 +124,7 @@ const FormSignUpEmail = (props: Props) => {
 
         {/* ===== EMAIL ===== */}
         <div className="mt-6">
-          <label className="block text-sm font-medium text-dark-primary mb-2">
+          <label className="block text-sm font-semibold text-dark-primary mb-2">
             Email <span className="text-green-primary">*</span>
           </label>
           <Input
@@ -150,7 +153,7 @@ const FormSignUpEmail = (props: Props) => {
 
         {/* ===== PASSWORD ===== */}
         <div className="mt-6">
-          <label className="block text-sm font-medium text-dark-primary mb-2">
+          <label className="block text-sm font-semibold text-dark-primary mb-2">
             Password <span className="text-green-primary">*</span>
           </label>
           <Input
@@ -196,7 +199,7 @@ const FormSignUpEmail = (props: Props) => {
         </div>
 
         <div className="mt-6">
-          <label className="block text-sm font-medium text-dark-primary mb-2">
+          <label className="block text-sm font-semibold text-dark-primary mb-2">
             Password confirm <span className="text-green-primary">*</span>
           </label>
           <Input

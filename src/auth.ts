@@ -28,8 +28,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         try {
           const { email, password } = credentials;
-
-          console.log({ email, password });
           if (!email || !password) {
             return null;
           }
@@ -70,8 +68,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async session({ session, token }) {
-      console.log("Session", session);
-      console.log("Token", token);
       return {
         ...session,
         user: {

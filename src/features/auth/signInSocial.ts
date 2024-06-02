@@ -14,7 +14,6 @@ export const signInSocial = async (
       redirectTo: redirectUrl || DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

@@ -1,43 +1,32 @@
-import { signIn } from "@/auth";
+import { userApi } from "@/features/apis";
 import { authApi } from "@/features/apis/auth";
-import { signInAction } from "@/features/auth/signIn";
-import { IPayloadSignUp } from "@/lib/interfaces";
-import { DEFAULT_LOGIN_REDIRECT } from "@/router";
-import { showErrorMessage, showSuccessMessage } from "@/utils/functions";
-import { IError, regexPassword } from "@/utils/shared";
+import { IPayloadSignUp } from "@/features/apis/interfaces";
+import {
+  formatExtensionFile,
+  formatPreSignUrlS3,
+  showErrorMessage,
+  showSuccessMessage,
+} from "@/utils/functions";
+import { IError, IFileUpload, regexPassword } from "@/utils/shared";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import * as yup from "yup";
+import {useDropzone} from 'react-dropzone';
 
 const useFormSignUpEmail = () => {
   const router = useRouter();
-
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
   const [isVisiblePasswordConfirm, setIsVisiblePasswordConfirm] =
     useState(false);
-  const [error, setError] = useState<IError | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [uploadImageProgress, setUploadImageProgress] = useState<number>(0);
-
-  const toggleVisibilityPwd = useCallback(
-    () => setIsVisiblePassword(!isVisiblePassword),
-    [isVisiblePassword]
-  );
-  const toggleVisibilityPwdConfirm = useCallback(
-    () => setIsVisiblePasswordConfirm(!isVisiblePasswordConfirm),
-    [isVisiblePasswordConfirm]
-  );
-
-  const handleChangeImage = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = e.target.files;
-      if (!files || files.length <= 0) return;
-      formik.setFieldValue("image", files[0]);
-    },
-    []
-  );
-
+  const [fileUpload, setFileUpload] = useState<IFileUpload>({
+    extension: "",
+    name: "",
+    type: "",
+  });
+  const [avatarPreview, setAvatarPreview] = useState<string>("");
   const validationSchema = yup.object({
     image: yup.mixed().nullable(),
     email: yup.string().email().required("Email is required"),
@@ -71,17 +60,23 @@ const useFormSignUpEmail = () => {
         setLoading(true);
         const { avatar } = values;
 
-        const newUser = await authApi.signUp({ ...values });
-
-        let newImageProfile = avatar;
+        const newUser = await authApi.signUp({ ...values, avatar: null });
         if (avatar) {
           //* Handle upload image
+          const preSignUrl = await userApi.generatePreSignUrl(
+            newUser.id,
+            fileUpload
+          );
+          await userApi.uploadAvatarToService(preSignUrl, avatar);
+
+          await userApi.update(newUser.id, {
+            avatar: formatPreSignUrlS3(preSignUrl),
+          });
         }
         setLoading(false);
         showSuccessMessage("Your account has been created successfully");
       } catch (error) {
         const err = error as IError;
-        console.log(err);
         setUploadImageProgress(0);
         setLoading(false);
         showErrorMessage(err.message);
@@ -89,16 +84,50 @@ const useFormSignUpEmail = () => {
     },
   });
 
+  const toggleVisibilityPwd = useCallback(
+    () => setIsVisiblePassword(!isVisiblePassword),
+    [isVisiblePassword]
+  );
+  const toggleVisibilityPwdConfirm = useCallback(
+    () => setIsVisiblePasswordConfirm(!isVisiblePasswordConfirm),
+    [isVisiblePasswordConfirm]
+  );
+
+  const handleChangeImage = useCallback(
+    (files: FileList | null) => {
+      if (!files || files.length <= 0) return;
+      const file = files[0];
+      formik.setFieldValue("avatar", file);
+
+      const { name, extension } = formatExtensionFile(file.name);
+      setFileUpload({
+        name,
+        extension,
+        type: file.type,
+      });
+
+      const preview = URL.createObjectURL(file);
+      setAvatarPreview(preview);
+    },
+    []
+  );
+  const handleRemoveImage = useCallback(() => {
+    formik.setFieldValue("avatar", null);
+    setFileUpload({ extension: "", name: "", type: "" });
+    setAvatarPreview("");
+  }, []);
+
   return {
     formik,
-    error,
     loading,
     isVisiblePassword,
     uploadImageProgress,
     isVisiblePasswordConfirm,
+    avatarPreview,
     toggleVisibilityPwdConfirm,
     toggleVisibilityPwd,
     handleChangeImage,
+    handleRemoveImage
   };
 };
 

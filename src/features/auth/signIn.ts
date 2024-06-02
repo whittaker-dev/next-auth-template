@@ -1,7 +1,7 @@
 "use server";
 
 import { signIn } from "@/auth";
-import { IPayloadSignIn } from "@/lib/interfaces";
+import { IPayloadSignIn } from "@/features/apis/interfaces";
 import { DEFAULT_LOGIN_REDIRECT } from "@/router";
 import { AuthError } from "next-auth";
 
