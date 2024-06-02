@@ -1,5 +1,5 @@
 export interface IPayloadSignUp {
-  image: string | File | null;
+  avatar: string | File | null;
   name: string;
   userName: string;
   email: string;

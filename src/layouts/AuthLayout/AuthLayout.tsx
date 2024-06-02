@@ -1,5 +1,5 @@
 "use client";
-import { appName, routerName } from "@/constant";
+import { appName, routerName } from "@/constants";
 import { Divider } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";

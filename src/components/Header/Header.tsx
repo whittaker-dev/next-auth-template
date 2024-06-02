@@ -1,14 +1,17 @@
-import { auth } from "@/auth";
-import { routerName } from "@/constant";
-import { signOutAction } from "@/prisma/actions/signOut";
+"use client";
+import { apiClient } from "@/app/api/axios";
+import { routerName } from "@/constants";
+import { signOutAction } from "@/features/auth/signOut";
 import { Button, Input } from "@nextui-org/react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 
 type Props = {};
 
-const Header = async (props: Props) => {
-  const session = await auth();
+const Header = (props: Props) => {
+  const session = useSession();
   return (
     <header className="fixed left-0 right-0 top-0 z-[9999] bg-green-primary-200 px-[5%] lg:px-[10%] py-4 flex items-center justify-between border-b border-solid border-b-slate-200">
       <div className="flex items-center justify-start gap-6">
@@ -68,7 +71,7 @@ const Header = async (props: Props) => {
           </span>
         </Link>
       </div>
-      {session && (
+      {session.status === "authenticated" && (
         <form action={signOutAction}>
           <Button type="submit">Logout</Button>
         </form>

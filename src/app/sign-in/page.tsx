@@ -1,24 +1,12 @@
 "use client";
-import { signIn } from "@/auth";
-import { regexPassword } from "@/common";
-import { IError } from "@/common/interface";
 import ButtonAuthSocial from "@/components/ButtonAuthSocial";
 import { ETypeAuthSocial } from "@/components/ButtonAuthSocial/ButtonAuthSocial";
-import { routerName } from "@/constant";
-import { useEdgeStore } from "@/lib/edgstore";
-import {
-  IPayloadSignIn,
-  IPayloadSignUp,
-} from "@/prisma/actions/interface/auth.interface";
-import { signInAction } from "@/prisma/actions/signIn";
-import { signUp } from "@/prisma/actions/signUp";
-import { updateUser } from "@/prisma/actions/updateUser";
-import { DEFAULT_REDIRECT } from "@/router";
+import { signInAction } from "@/features/auth/signIn";
+import { IPayloadSignIn } from "@/lib/interfaces";
+import { IError } from "@/utils/shared/interface";
 import { Button, Input, Spinner } from "@nextui-org/react";
 import { useFormik } from "formik";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import * as yup from "yup";
 

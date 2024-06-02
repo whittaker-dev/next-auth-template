@@ -1,5 +1,5 @@
 export interface IError {
   message: string;
-  stack: string;
-  status: string;
+  stack?: string;
+  status?: string;
 }

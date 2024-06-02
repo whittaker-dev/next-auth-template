@@ -1,8 +1,12 @@
-import "./globals.css";
 import { EdgeStoreProvider } from "@/lib/edgstore";
 import { NextUIProvider } from "@/providers/NextUIProvider";
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { StoreProvider } from "./StoreProvider";
+import "./globals.css";
+
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
@@ -34,7 +38,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${montserrat.className} bg-green-primary-400`}>
         <NextUIProvider>
-          <EdgeStoreProvider>{children}</EdgeStoreProvider>
+          <EdgeStoreProvider>
+            <StoreProvider>
+              {children}
+              <ToastContainer />
+            </StoreProvider>
+          </EdgeStoreProvider>
         </NextUIProvider>
       </body>
     </html>

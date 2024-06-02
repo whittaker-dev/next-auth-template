@@ -1,6 +1,6 @@
 import { signIn } from "@/auth";
-import { routerName, searchParamsName } from "@/constant";
-import { signInSocial } from "@/feature/auth/signInSocial";
+import { routerName, searchParamsName } from "@/constants";
+import { signInSocial } from "@/features/auth/signInSocial";
 import { DEFAULT_LOGIN_REDIRECT } from "@/router";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
