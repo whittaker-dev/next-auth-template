@@ -4,10 +4,13 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { cookies } from "next/headers";
 import { cookieKeys } from "./constants/cookieKeys";
+import { EAuthProvider } from "./features/apis/interfaces";
+import { authApi } from "./features/apis";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
     signIn: "/sign-in",
+    error: "/sign-in/error",
   },
   providers: [
     GitHub({
@@ -79,11 +82,22 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       return { ...token, ...user };
     },
-    signIn({ account, user, credentials, profile }) {
+    async signIn({ account, user, credentials, profile }) {
       console.log({ account, user, credentials, profile });
 
       if (account?.provider === "github") {
-        console.log("user id", profile?.id);
+        const data = await authApi.handleLoginSocialAccount({
+          id: profile?.id ?? "",
+          avatar: String(profile?.avatar_url) ?? "",
+          name: profile?.name ?? "",
+          location: String(profile?.location) ?? "",
+          provider: EAuthProvider.Github,
+        });
+        if (data.status !== "error") {
+          return true;
+        } else {
+          throw new Error(data.message);
+        }
       }
       return true;
     },

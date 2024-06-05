@@ -51,12 +51,16 @@ const FormSignUpEmail = (props: Props) => {
             Profile image
           </label>
 
-          <InputFileUpload
-            idInput="sign-up-input-avatar"
-            urlPreview={avatarPreview}
-            handleChangeImage={handleChangeImage}
-            handleRemoveImage={handleRemoveImage}
-          />
+          <div className="w-1/2 my-0 mx-auto">
+            <InputFileUpload
+              idInput="sign-up-input-avatar"
+              urlPreview={avatarPreview}
+              handleChangeImage={handleChangeImage}
+              handleRemoveImage={handleRemoveImage}
+              imageClassName="rounded-full"
+              imageWrapperClassName="!rounded-full"
+            />
+          </div>
           {formik.errors.avatar && (
             <p className="text-[12px] font-medium text-red-700 mt-2">
               {formik.errors.avatar}

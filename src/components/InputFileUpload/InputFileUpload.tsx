@@ -2,6 +2,7 @@ import Image from "next/image";
 import React, { useCallback, useRef } from "react";
 import ButtonMain from "../ButtonMain";
 import { useDropzone } from "react-dropzone";
+import clsx from "clsx";
 
 type Props = {
   urlPreview: string;
@@ -9,6 +10,8 @@ type Props = {
   handleChangeImage: (files: FileList | null) => void;
   handleRemoveImage: () => void;
   multiple?: boolean;
+  imageClassName?: string;
+  imageWrapperClassName?: string;
 };
 
 const InputFileUpload = ({
@@ -17,6 +20,8 @@ const InputFileUpload = ({
   handleChangeImage,
   handleRemoveImage,
   multiple,
+  imageClassName,
+  imageWrapperClassName,
 }: Props) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { getRootProps, getInputProps } = useDropzone({
@@ -51,16 +56,23 @@ const InputFileUpload = ({
       />
       {urlPreview ? (
         <div className="relative group overflow-hidden">
-          <div className="w-full aspect-square relative cursor-pointer transition-all rounded-lg overflow-hidden">
-            <div className="absolute size-full bg-black z-10 group-hover:opacity-50 opacity-0 transition-all"></div>
+          <div
+            className={clsx(
+              "w-full aspect-square relative cursor-pointer transition-all rounded-lg overflow-hidden",
+              imageWrapperClassName ? imageWrapperClassName : ""
+            )}
+          >
             <Image
               src={urlPreview}
               alt="profile-image"
               fill
-              className="group-hover:blur-sm"
+              className={clsx(
+                "group-hover:blur-sm",
+                imageClassName ? imageClassName : ""
+              )}
             />
           </div>
-          <div className="flex items-center justify-start gap-2 absolute bottom-4 right-4 bg-white shadow-linear rounded-md z-20 translate-x-80 group-hover:translate-x-0 transition-all">
+          <div className="flex items-center justify-start gap-2 absolute left-1/2 bottom-4 bg-white shadow-linear rounded-md z-20  -translate-x-1/2 translate-y-80 group-hover:translate-y-0 transition-all">
             <ButtonMain
               prefixIcon="/icons/change-animation.gif"
               className="bg-transparent"
