@@ -4,13 +4,14 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { cookies } from "next/headers";
 import { cookieKeys } from "./constants/cookieKeys";
-import { EAuthProvider } from "./features/apis/interfaces";
+import { EAuthProvider, IUser } from "./features/apis/interfaces";
 import { authApi } from "./features/apis";
+import { setCookies } from "./lib/serverActions/setCookies";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
     signIn: "/sign-in",
-    error: "/sign-in/error",
+    error: "/auth-error",
   },
   providers: [
     GitHub({
@@ -53,13 +54,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           if (data.status === "error") {
             throw new Error(data.message);
           }
-          cookies().set({
-            name: `${cookieKeys.accessToken}`,
-            value: data.data.user.accessToken,
-            httpOnly: true,
-            sameSite: "strict",
-            secure: false,
-          });
+          setCookies(data.data.user.accessToken);
 
           return data.data.user;
         } catch (error) {
@@ -71,11 +66,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async session({ session, token }) {
+      console.log("token", token);
+      const _token = token as unknown as IUser;
+      const data = await authApi.getUser(_token.accessToken);
       return {
         ...session,
         user: {
           ...session.user,
-          ...token,
+          ...data.user,
         },
       };
     },
@@ -83,7 +81,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return { ...token, ...user };
     },
     async signIn({ account, user, credentials, profile }) {
-      console.log({ account, user, credentials, profile });
+      // console.log({ account, user, credentials, profile });
 
       if (account?.provider === "github") {
         const data = await authApi.handleLoginSocialAccount({
@@ -94,6 +92,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           provider: EAuthProvider.Github,
         });
         if (data.status !== "error") {
+          setCookies(data.user.accessToken);
           return true;
         } else {
           throw new Error(data.message);

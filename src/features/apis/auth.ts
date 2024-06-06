@@ -51,7 +51,26 @@ class AuthApi {
       }
     );
     const data = await res.json();
-    return data;
+    return data.data;
+  }
+
+  async getUser(accessToken: string) {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/get-user`,
+        {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const data = await res.json();
+      return data.data;
+    } catch (error) {
+      throw error;
+    }
   }
 }
 
