@@ -10,7 +10,7 @@ export enum ETypeAuthSocial {
   Google = "Google",
   Github = "Github",
   Twitter = "Twitter",
-  Apple = "Apple",
+  Discord = "Discord",
   Email = "Email",
 }
 
@@ -38,6 +38,12 @@ const ButtonAuthSocial = React.memo(({ title, icon, type }: Props) => {
         case ETypeAuthSocial.Google:
           await signInSocial("google");
           break;
+        case ETypeAuthSocial.Discord:
+          await signInSocial("discord");
+          break;
+        case ETypeAuthSocial.Twitter:
+          await signInSocial("twitter");
+          break;
         default:
           break;
       }
@@ -63,8 +69,8 @@ const ButtonAuthSocial = React.memo(({ title, icon, type }: Props) => {
         <p className="text-sm lg:text-base font-medium text-dark-primary">
           {title}
         </p>
-        <div></div>
-        {loading && (
+
+        {loading ? (
           <Spinner
             size="md"
             classNames={{
@@ -72,6 +78,8 @@ const ButtonAuthSocial = React.memo(({ title, icon, type }: Props) => {
               circle2: "border-b-green-primary",
             }}
           />
+        ) : (
+          <div></div>
         )}
       </div>
     </div>

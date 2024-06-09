@@ -36,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${montserrat.className} bg-green-primary-400`}>
+      <body className={`${montserrat.className} bg-green-primary-400 h-[calc(100vh - 73px)]`}>
         <NextUIProvider>
           <EdgeStoreProvider>
             <StoreProvider>

@@ -22,9 +22,9 @@ const FormSignUp = (props: Props) => {
         <>
           <div className="flex items-center justify-start gap-4 flex-col mt-10 w-full">
             <ButtonAuthSocial
-              title="Sign up with Apple"
-              type={ETypeAuthSocial.Apple}
-              icon="/icons/apple.svg"
+              title="Sign up with Discord"
+              type={ETypeAuthSocial.Discord}
+              icon="/icons/discord.svg"
             />
             <ButtonAuthSocial
               title="Sign up with Google"

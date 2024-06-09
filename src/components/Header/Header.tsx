@@ -1,17 +1,17 @@
 "use client";
-import { apiClient } from "@/app/api/axios";
 import { routerName } from "@/constants";
 import { signOutAction } from "@/features/auth/signOut";
 import { Button, Input } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import MenuUser from "../HeaderUser";
 
 type Props = {};
 
 const Header = (props: Props) => {
   const session = useSession();
+  const isAuthenticated = session.status === "authenticated";
   return (
     <header className="fixed left-0 right-0 top-0 z-[9999] bg-green-primary-200 px-[5%] lg:px-[10%] py-4 flex items-center justify-between border-b border-solid border-b-slate-200">
       <div className="flex items-center justify-start gap-6">
@@ -55,26 +55,25 @@ const Header = (props: Props) => {
         </div>
       </div>
 
-      <div className="flex items-center justify-end gap-3">
-        <Link
-          href={routerName.signIn}
-          className="text-base text-dark-primary font-medium hover:bg-green-primary-400 px-4 py-2 rounded transition-all text-nowrap"
-        >
-          Log in
-        </Link>
-        <Link
-          href={routerName.signUp}
-          className="group bg-green-primary-600 size-full block rounded-md"
-        >
-          <span className="block px-3 py-2 rounded-md bg-white border-2 border-solid border-green-primary-600 text-sm font-bold text-green-primary-600 transition-all -translate-y-1 -translate-x-1 group-active:translate-x-0 group-active:translate-y-0">
-            Create account
-          </span>
-        </Link>
-      </div>
-      {session.status === "authenticated" && (
-        <form action={signOutAction}>
-          <Button type="submit">Logout</Button>
-        </form>
+      {isAuthenticated ? (
+        <MenuUser />
+      ) : (
+        <div className="flex items-center justify-end gap-3">
+          <Link
+            href={routerName.signIn}
+            className="text-base text-dark-primary font-medium hover:bg-green-primary-400 px-4 py-2 rounded transition-all text-nowrap"
+          >
+            Log in
+          </Link>
+          <Link
+            href={routerName.signUp}
+            className="group bg-green-primary-600 size-full block rounded-md"
+          >
+            <span className="block px-3 py-2 rounded-md bg-white border-2 border-solid border-green-primary-600 text-sm font-bold text-green-primary-600 transition-all -translate-y-1 -translate-x-1 group-active:translate-x-0 group-active:translate-y-0">
+              Create account
+            </span>
+          </Link>
+        </div>
       )}
     </header>
   );

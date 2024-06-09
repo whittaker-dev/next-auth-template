@@ -29,17 +29,16 @@ class AuthApi {
   }
 
   async handleLoginSocialAccount(profile: IPayloadAuthSocial) {
-    let body = {};
-    if (profile.provider === EAuthProvider.Github) {
-      body = {
-        id: profile?.id,
-        avatar: profile?.avatar ?? "",
-        name: profile?.name,
-        location: profile.location,
-      };
-    }
+    let body = {
+      id: profile?.id,
+      avatar: profile?.avatar ?? "",
+      name: profile?.name,
+      email: profile?.email,
+      location: profile?.location,
+    };
+    console.log("body", body);
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/social/${EAuthProvider.Github}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/social/${profile.provider}`,
       {
         method: "POST",
         headers: {
@@ -51,7 +50,10 @@ class AuthApi {
       }
     );
     const data = await res.json();
-    return data.data;
+    if (data.data) {
+      return data.data;
+    }
+    return data;
   }
 
   async getUser(accessToken: string) {
@@ -63,6 +65,25 @@ class AuthApi {
           headers: {
             "Content-type": "application/json",
             Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const data = await res.json();
+      return data.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async refreshToken(refreshToken: string) {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`,
+        {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${refreshToken}`,
           },
         }
       );

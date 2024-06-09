@@ -7,6 +7,7 @@ export enum EAuthProvider {
   Github = "Github",
   Google = "Google",
   Apple = "Apple",
+  Discord = "Discord",
   Twitter = "Twitter",
   EmailPassword = "EmailPassword",
 }
@@ -24,7 +25,8 @@ export interface IUser {
   bio: string;
   location: string;
   role: ERoleUser;
-  accessToken: string;
   authProvider: EAuthProvider;
   authProviderId: string;
+  accessToken: string;
+  refreshToken: string;
 }

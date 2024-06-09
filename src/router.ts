@@ -35,4 +35,4 @@ export const apiAuthPrefix = "/api/auth";
  * An array of routes that used for authentication
  * @type {string[]}
  */
-export const authRoutes = ["/sign-in", "/sign-up"];
+export const authRoutes = ["/sign-in", "/sign-up", '/auth/error'];
