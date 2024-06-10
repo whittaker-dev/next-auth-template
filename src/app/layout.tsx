@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { StoreProvider } from "./StoreProvider";
+// import { StoreProvider } from "./StoreProvider";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -36,13 +36,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${montserrat.className} bg-green-primary-400 h-[calc(100vh - 73px)]`}>
+      <body
+        className={`${montserrat.className} bg-green-primary-400 h-[calc(100vh - 73px)]`}
+      >
         <NextUIProvider>
           <EdgeStoreProvider>
-            <StoreProvider>
-              {children}
-              <ToastContainer />
-            </StoreProvider>
+            {children}
+            <ToastContainer />
           </EdgeStoreProvider>
         </NextUIProvider>
       </body>
