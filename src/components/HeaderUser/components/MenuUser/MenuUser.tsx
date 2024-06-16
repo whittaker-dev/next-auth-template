@@ -1,4 +1,5 @@
 import { routerName } from "@/constants";
+import { IUser } from "@/features/apis/interfaces";
 import { signOutAction } from "@/features/auth/signOut";
 import {
   Dropdown,
@@ -7,17 +8,16 @@ import {
   DropdownTrigger,
 } from "@nextui-org/react";
 import clsx from "clsx";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Skeleton from "react-loading-skeleton";
 
-type Props = {};
+type Props = {
+  user?: IUser;
+};
 
-const MenuUser = (props: Props) => {
+const MenuUser = ({ user }: Props) => {
   const pathname = usePathname();
-  const { data, status } = useSession();
 
   const items = [
     {
@@ -59,20 +59,14 @@ const MenuUser = (props: Props) => {
   return (
     <Dropdown>
       <DropdownTrigger className="cursor-pointer">
-        {status !== "loading" ? (
-          <div className="relative w-10 h-10 rounded-full ">
-            <Image
-              src={data?.user?.avatar ?? ""}
-              alt="profile-image"
-              fill
-              className="rounded-full object-cover"
-            />
-          </div>
-        ) : (
-          <div className="w-10 h-10 rounded-full">
-            <Skeleton className="size-full !rounded-full !leading-inherit" />
-          </div>
-        )}
+        <div className="relative w-10 h-10 rounded-full ">
+          <Image
+            src={user?.avatar ?? ""}
+            alt="profile-image"
+            fill
+            className="rounded-full object-cover"
+          />
+        </div>
       </DropdownTrigger>
       <DropdownMenu
         aria-label="Static Actions"
@@ -100,7 +94,10 @@ const MenuUser = (props: Props) => {
                 </button>
               </form>
             ) : (
-              <Link href={item?.url ?? "/"} className="block text-sm font-normal">
+              <Link
+                href={item?.url ?? "/"}
+                className="block text-sm font-normal"
+              >
                 {item.label}
               </Link>
             )}

@@ -9,6 +9,7 @@ import { authApi } from "./features/apis";
 import { EAuthProvider, IUser } from "./features/apis/interfaces";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  trustHost: true,
   pages: {
     signIn: "/sign-in",
     error: "/auth/error",

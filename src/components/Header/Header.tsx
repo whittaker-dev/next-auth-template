@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import MenuUser from "../HeaderUser";
 import Skeleton from "react-loading-skeleton";
+import { Suspense } from "react";
 
 type Props = {};
 
@@ -13,7 +14,6 @@ const Header = (props: Props) => {
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
   const loading = status === "loading";
-
   return (
     <header className="fixed left-0 right-0 top-0 z-[9999] bg-green-primary-200 px-[5%] lg:px-[10%] py-4 flex items-center justify-between border-b border-solid border-b-slate-200">
       <div className="flex items-center justify-start gap-6">
@@ -57,33 +57,26 @@ const Header = (props: Props) => {
         </div>
       </div>
 
-      {loading ? (
-        <div className="w-40 h-10">
-          <Skeleton className="size-full" />
+      <Suspense>
+        <MenuUser />
+      </Suspense>
+      {!isAuthenticated && !loading && (
+        <div className="flex items-center justify-end gap-3">
+          <Link
+            href={routerName.signIn}
+            className="text-base text-dark-primary font-medium hover:bg-green-primary-400 px-4 py-2 rounded transition-all text-nowrap"
+          >
+            Log in
+          </Link>
+          <Link
+            href={routerName.signUp}
+            className="group bg-green-primary-600 size-full block rounded-md"
+          >
+            <span className="block px-3 py-2 rounded-md bg-white border-2 border-solid border-green-primary-600 text-sm font-bold text-green-primary-600 transition-all -translate-y-1 -translate-x-1 group-active:translate-x-0 group-active:translate-y-0">
+              Create account
+            </span>
+          </Link>
         </div>
-      ) : (
-        <>
-          {isAuthenticated ? (
-            <MenuUser />
-          ) : (
-            <div className="flex items-center justify-end gap-3">
-              <Link
-                href={routerName.signIn}
-                className="text-base text-dark-primary font-medium hover:bg-green-primary-400 px-4 py-2 rounded transition-all text-nowrap"
-              >
-                Log in
-              </Link>
-              <Link
-                href={routerName.signUp}
-                className="group bg-green-primary-600 size-full block rounded-md"
-              >
-                <span className="block px-3 py-2 rounded-md bg-white border-2 border-solid border-green-primary-600 text-sm font-bold text-green-primary-600 transition-all -translate-y-1 -translate-x-1 group-active:translate-x-0 group-active:translate-y-0">
-                  Create account
-                </span>
-              </Link>
-            </div>
-          )}
-        </>
       )}
     </header>
   );
