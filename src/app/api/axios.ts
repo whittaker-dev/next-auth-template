@@ -120,6 +120,7 @@ class ApiClient implements IApiClient {
       const dataError = data as IResponseError;
       if (status === 401 && error.config) {
         // * Handle Refresh token logic
+        console.log("Get new access token");
       }
 
       throw {

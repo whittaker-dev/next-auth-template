@@ -1,5 +1,5 @@
 "use client";
-import { searchParamsName } from "@/constants";
+import { searchParamsKeys } from "@/constants";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import FormSignUpEmail from "../FormSignUpEmail";
@@ -10,7 +10,7 @@ type Props = {};
 const FormSignUp = (props: Props) => {
   const searchParams = useSearchParams();
   const isSignUpEmail =
-    searchParams.get("state") === searchParamsName.signUp.emailSignUp;
+    searchParams.get("state") === searchParamsKeys.signUp.emailSignUp;
 
   return (
     <div className="flex items-center justify-center flex-col bg-green-primary-400 w-full">

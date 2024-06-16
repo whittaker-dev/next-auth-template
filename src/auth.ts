@@ -1,13 +1,12 @@
+import { jwtDecode } from "jwt-decode";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Discord from "next-auth/providers/discord";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import Twitter from "next-auth/providers/twitter";
-import Discord from "next-auth/providers/discord";
 import { authApi } from "./features/apis";
 import { EAuthProvider, IUser } from "./features/apis/interfaces";
-import { setCookies } from "./lib/serverActions/setCookies";
-import { jwtDecode } from "jwt-decode";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -63,8 +62,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           if (data.status === "error") {
             throw new Error(data.message);
           }
-          setCookies(data.data.user.accessToken);
-
           return data.data.user;
         } catch (error) {
           throw error;
@@ -91,7 +88,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           user.id = data.user.id;
           user.accessToken = data.user.accessToken;
           user.refreshToken = data.user.refreshToken;
-          setCookies(data.user.accessToken);
           return true;
         } else {
           return false;
@@ -112,7 +108,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           user.id = data.user.id;
           user.accessToken = data.user.accessToken;
           user.refreshToken = data.user.refreshToken;
-          setCookies(data.user.accessToken);
           return true;
         } else {
           return false;
@@ -132,7 +127,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           user.id = data.user.id;
           user.accessToken = data.user.accessToken;
           user.refreshToken = data.user.refreshToken;
-          setCookies(data.user.accessToken);
           return true;
         } else {
           return false;
@@ -158,7 +152,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           user.id = data.user.id;
           user.accessToken = data.user.accessToken;
           user.refreshToken = data.user.refreshToken;
-          setCookies(data.user.accessToken);
           return true;
         } else {
           return false;
@@ -172,9 +165,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         const { exp } = jwtDecode(token.accessToken);
         if (exp) {
           const currentTime = new Date();
-          currentTime.setDate(new Date().getDate() + 1);
-          if (exp >= currentTime.getTime()) {
+          if (currentTime.getTime() > exp * 1000) {
             const data = await authApi.refreshToken(token.refreshToken);
+            const user = await authApi.getUser(data.accessToken);
+            console.log("Refresh token successfully");
             return {
               ...token,
               ...user,
@@ -182,15 +176,17 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               refreshToken: data.refreshToken,
             };
           }
+
+          const user = await authApi.getUser(token.accessToken);
           return { ...token, ...user };
         }
       }
 
-      return { ...token, ...user };
+      if (user) {
+        return { ...token, ...user };
+      }
     },
     async session({ session, token }) {
-      const _token = token as unknown as IUser;
-      const data = await authApi.getUser(_token.accessToken);
       const { exp } = jwtDecode(token.accessToken);
       if (exp) {
         session.expires = new Date(exp * 1000) as any;
@@ -199,7 +195,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         ...session,
         user: {
           ...session.user,
-          ...data.user,
+          ...token.user,
+          accessToken: token.accessToken,
+          refreshToken: token.refreshToken,
         },
       };
     },

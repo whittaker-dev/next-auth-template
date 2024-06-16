@@ -14,7 +14,7 @@ export const signInAction = async (
     await signIn("credentials", {
       email,
       password,
-      redirectTo: redirectTo ?? DEFAULT_LOGIN_REDIRECT,
+      redirectTo: `/${redirectTo}` ?? DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error: any) {
     if (error instanceof AuthError) {

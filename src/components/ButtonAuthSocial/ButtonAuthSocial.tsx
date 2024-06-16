@@ -1,9 +1,9 @@
-import { routerName, searchParamsName } from "@/constants";
+import { routerName, searchParamsKeys } from "@/constants";
 import { signInSocial } from "@/features/auth/signInSocial";
 import { Spinner } from "@nextui-org/react";
 import clsx from "clsx";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useState } from "react";
 
 export enum ETypeAuthSocial {
@@ -22,6 +22,9 @@ type Props = {
 
 const ButtonAuthSocial = React.memo(({ title, icon, type }: Props) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get(searchParamsKeys.returnUrl);
+
   const [loading, setLoading] = useState<boolean>(false);
   const handleAuthSocial = useCallback(async () => {
     try {
@@ -29,20 +32,20 @@ const ButtonAuthSocial = React.memo(({ title, icon, type }: Props) => {
       switch (type) {
         case ETypeAuthSocial.Email:
           router.push(
-            `${routerName.signUp}?state=${searchParamsName.signUp.emailSignUp}`
+            `${routerName.signUp}?state=${searchParamsKeys.signUp.emailSignUp}`
           );
           break;
         case ETypeAuthSocial.Github:
-          await signInSocial("github");
+          await signInSocial("github", returnUrl ?? "/");
           break;
         case ETypeAuthSocial.Google:
-          await signInSocial("google");
+          await signInSocial("google", returnUrl ?? "/");
           break;
         case ETypeAuthSocial.Discord:
-          await signInSocial("discord");
+          await signInSocial("discord", returnUrl ?? "/");
           break;
         case ETypeAuthSocial.Twitter:
-          await signInSocial("twitter");
+          await signInSocial("twitter", returnUrl ?? "/");
           break;
         default:
           break;

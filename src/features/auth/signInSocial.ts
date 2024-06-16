@@ -11,7 +11,7 @@ export const signInSocial = async (
 ) => {
   try {
     await signIn(type, {
-      redirectTo: redirectUrl || DEFAULT_LOGIN_REDIRECT,
+      redirectTo: `/${redirectUrl}` || DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
     throw error;

@@ -1,18 +1,22 @@
 "use client";
 import ButtonAuthSocial from "@/components/ButtonAuthSocial";
 import { ETypeAuthSocial } from "@/components/ButtonAuthSocial/ButtonAuthSocial";
+import { searchParamsKeys } from "@/constants";
 import { IPayloadSignIn } from "@/features/apis/interfaces";
 import { signInAction } from "@/features/auth/signIn";
 import { IError } from "@/utils/shared/interface";
 import { Button, Input, Spinner } from "@nextui-org/react";
 import { useFormik } from "formik";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import * as yup from "yup";
 
 type Props = {};
 
 const FormSignIn = (props: Props) => {
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get(searchParamsKeys.returnUrl);
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
   const [error, setError] = useState<IError | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -38,7 +42,7 @@ const FormSignIn = (props: Props) => {
       try {
         setLoading(true);
         const { email, password } = values;
-        await signInAction({ email, password });
+        await signInAction({ email, password }, returnUrl ?? "/");
         setLoading(false);
       } catch (error) {
         const err = error as IError;

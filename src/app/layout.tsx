@@ -6,6 +6,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { StoreProvider } from "./StoreProvider";
 import "./globals.css";
+import 'react-loading-skeleton/dist/skeleton.css'
+
 
 const montserrat = Montserrat({
   subsets: ["latin"],

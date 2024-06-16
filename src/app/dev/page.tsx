@@ -1,23 +1,8 @@
-const getPosts = async () => {
-  return {
-    posts: [
-      { id: 1, title: "test post" },
-      { id: 1, title: "test post" },
-      { id: 1, title: "test post" },
-    ],
-  };
-};
-const page = async () => {
-  const { posts } = await getPosts();
-  return (
-    <div>
-      {posts.map((item) => (
-        <div className="" key={item.id}>
-          {item.title}
-        </div>
-      ))}
-    </div>
-  );
+import { auth } from "@/auth";
+
+const Page = async () => {
+  const session = await auth();
+  return <div>{JSON.stringify(session)}</div>;
 };
 
-export default page;
+export default Page;
