@@ -6,8 +6,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { StoreProvider } from "./StoreProvider";
 import "./globals.css";
-import 'react-loading-skeleton/dist/skeleton.css'
-
+import "react-loading-skeleton/dist/skeleton.css";
+import { SWRConfig } from "swr";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -20,13 +20,13 @@ export const metadata: Metadata = {
   icons: [
     {
       media: "(prefers-color-scheme: light)",
-      url: "/images/logo-app.png",
-      href: "/images/logo-app.png",
+      url: "/images/logo-app.jpg",
+      href: "/images/logo-app.jpg",
     },
     {
       media: "(prefers-color-scheme: dark)",
-      url: "/images/logo-app.png",
-      href: "/images/logo-app.png",
+      url: "/images/logo-app.jpg",
+      href: "/images/logo-app.jpg",
     },
   ],
 };

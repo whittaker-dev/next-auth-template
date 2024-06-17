@@ -1,6 +1,6 @@
 import { routerName } from "@/constants";
-import { IUser } from "@/features/apis/interfaces";
 import { signOutAction } from "@/features/auth/signOut";
+import { useUser } from "@/hooks/useUser";
 import {
   Dropdown,
   DropdownItem,
@@ -11,12 +11,12 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Skeleton from "react-loading-skeleton";
 
-type Props = {
-  user?: IUser;
-};
+type Props = {};
 
-const MenuUser = ({ user }: Props) => {
+const MenuUser = ({}: Props) => {
+  const { user, isLoading, error } = useUser();
   const pathname = usePathname();
 
   const items = [
@@ -59,14 +59,20 @@ const MenuUser = ({ user }: Props) => {
   return (
     <Dropdown>
       <DropdownTrigger className="cursor-pointer">
-        <div className="relative w-10 h-10 rounded-full ">
-          <Image
-            src={user?.avatar ?? ""}
-            alt="profile-image"
-            fill
-            className="rounded-full object-cover"
-          />
-        </div>
+        {isLoading ? (
+          <div className="w-10 h-10 rounded-full ">
+            <Skeleton className="size-full !rounded-full" />
+          </div>
+        ) : (
+          <div className="relative w-10 h-10 rounded-full ">
+            <Image
+              src={user?.avatar ?? ""}
+              alt="profile-image"
+              fill
+              className="rounded-full object-cover"
+            />
+          </div>
+        )}
       </DropdownTrigger>
       <DropdownMenu
         aria-label="Static Actions"
@@ -82,25 +88,27 @@ const MenuUser = ({ user }: Props) => {
           <DropdownItem
             shortcut={item.shortcut}
             key={item.key}
-            className={clsx("p-3 text-dark-primary")}
+            className={clsx("p-0 pr-3 text-dark-primary")}
           >
-            {item.key === "logout" ? (
-              <form action={signOutAction.bind(null, pathname.split("/")[1])}>
-                <button
-                  type="submit"
-                  className="text-sm font-normal hover:text-red-500"
+            <div className="p-3">
+              {item.key === "logout" ? (
+                <form action={signOutAction.bind(null, pathname.split("/")[1])}>
+                  <button
+                    type="submit"
+                    className="text-sm font-normal hover:text-red-500"
+                  >
+                    {item.label}
+                  </button>
+                </form>
+              ) : (
+                <Link
+                  href={item?.url ?? "/"}
+                  className="block text-sm font-normal"
                 >
                   {item.label}
-                </button>
-              </form>
-            ) : (
-              <Link
-                href={item?.url ?? "/"}
-                className="block text-sm font-normal"
-              >
-                {item.label}
-              </Link>
-            )}
+                </Link>
+              )}
+            </div>
           </DropdownItem>
         )}
       </DropdownMenu>

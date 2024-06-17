@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const loading = (props: Props) => {
-  return (
-    <div className=''>loading...</div>
-  )
-}
+  return <div className="h-screen w-full">loading...</div>;
+};
 
-export default loading
+export default loading;

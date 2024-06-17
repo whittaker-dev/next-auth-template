@@ -1,9 +1,5 @@
-import { auth } from "@/auth";
-import { getCachedSession } from "@/lib/getCachedSession";
-
 const Page = async () => {
-  const session = await getCachedSession();
-  return <div>{JSON.stringify(session)}</div>;
+  return <div>dev page neeeeeee</div>;
 };
 
 export default Page;

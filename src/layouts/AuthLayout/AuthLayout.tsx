@@ -17,7 +17,7 @@ const AuthLayout = ({ children }: Props) => {
   return (
     <div className="flex items-center justify-center flex-col bg-green-primary-400 py-10 lg:py-20">
       <div className="relative w-24 h-12">
-        <Image src={"/images/logo-app.png"} alt="logo-app" fill />
+        <Image src={"/images/logo-app.jpg"} alt="logo-app" fill />
       </div>
       <h4 className="text-2xl lg:text-3xl font-bold text-dark-primary mt-8 mb-2 text-center">
         Join the TrySomeThign Community

@@ -99,7 +99,8 @@ class ApiClient implements IApiClient {
       return response.data;
     } catch (error) {
       const err = error as AxiosError;
-      return this.handleServiceError(err);
+      throw error;
+      this.handleServiceError(err);
     }
   }
 
