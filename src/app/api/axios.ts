@@ -1,8 +1,9 @@
 "use client";
-import { IError } from "@/utils/shared";
+import { cookieKeys } from "@/constants/cookieKeys";
+import { authApi } from "@/features/apis";
 import Axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
+import { getCookie, setCookie } from "cookies-next";
 import { getSession } from "next-auth/react";
-
 export interface IApiClient {
   post<T>(path: string, object: T, config?: RequestConfig): Promise<any>;
   patch<T>(path: string, object: T): Promise<any>;
@@ -40,16 +41,50 @@ class ApiClient implements IApiClient {
       timeout: 150 * 1000,
     });
 
-    api.interceptors.response.use((response) => {
-      return response.data;
-    });
+    api.interceptors.request.use(
+      async (request) => {
+        const accessToken = getCookie(cookieKeys.accessToken);
+        request.headers["Authorization"] = `Bearer ${accessToken}`;
+        return request;
+      },
+      (error) => Promise.reject(error)
+    );
 
-    api.interceptors.request.use(async (request) => {
-      const session = await getSession();
-      const accessToken = session?.user.accessToken;
-      request.headers["Authorization"] = `Bearer ${accessToken}`;
-      return request;
-    });
+    api.interceptors.response.use(
+      (response) => {
+        return response.data;
+      },
+      async (error) => {
+        const err = error as AxiosError;
+        const status = err.response?.status;
+        const responseURL: string = err.request.responseURL;
+        const excludeUrlsGetRefreshToken = [
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-in`,
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-up`,
+        ];
+        const config = err.config;
+        if (
+          status === 401 &&
+          config &&
+          !excludeUrlsGetRefreshToken.includes(responseURL)
+        ) {
+          // * Handle Refresh token logic
+          const session = await getSession();
+          const refreshToken = session?.user.refreshToken;
+          if (!refreshToken) return Promise.reject(error);
+
+          const { accessToken: newAccessToken } = await authApi.refreshToken(
+            refreshToken
+          );
+          if (!newAccessToken) return Promise.reject(error);
+
+          config.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          setCookie(cookieKeys.accessToken, newAccessToken);
+          return api(config);
+        }
+        return Promise.reject(error);
+      }
+    );
     return api;
   }
 
@@ -65,7 +100,7 @@ class ApiClient implements IApiClient {
       return response.data;
     } catch (error) {
       const err = error as AxiosError;
-      return this.handleServiceError(err);
+      throw err;
     }
   }
 
@@ -77,7 +112,7 @@ class ApiClient implements IApiClient {
       return response.data;
     } catch (error) {
       const err = error as AxiosError;
-      return this.handleServiceError(err);
+      throw err;
     }
   }
 
@@ -89,7 +124,7 @@ class ApiClient implements IApiClient {
       return response.data;
     } catch (error) {
       const err = error as AxiosError;
-      return this.handleServiceError(err);
+      throw err;
     }
   }
 
@@ -100,7 +135,6 @@ class ApiClient implements IApiClient {
     } catch (error) {
       const err = error as AxiosError;
       throw error;
-      this.handleServiceError(err);
     }
   }
 
@@ -110,25 +144,7 @@ class ApiClient implements IApiClient {
       return response.data;
     } catch (error) {
       const err = error as AxiosError;
-      return this.handleServiceError(err);
-    }
-  }
-
-  async handleServiceError(error: AxiosError) {
-    if (error.response) {
-      const { status, data } = error.response;
-
-      const dataError = data as IResponseError;
-      if (status === 401 && error.config) {
-        // * Handle Refresh token logic
-        console.log("Get new access token");
-      }
-
-      throw {
-        message: dataError.message,
-        status: dataError.status,
-        stack: "Error",
-      } as IError;
+      throw err;
     }
   }
 }

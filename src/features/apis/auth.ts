@@ -75,7 +75,7 @@ class AuthApi {
     }
   }
 
-  async refreshToken(refreshToken: string) {
+  async refreshToken(refreshToken: string): Promise<{ accessToken: string }> {
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`,

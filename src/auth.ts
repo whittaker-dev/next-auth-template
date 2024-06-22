@@ -7,6 +7,7 @@ import Google from "next-auth/providers/google";
 import Twitter from "next-auth/providers/twitter";
 import { authApi } from "./features/apis";
 import { EAuthProvider, IUser } from "./features/apis/interfaces";
+import { setCookies } from "./lib/serverActions/setCookies";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -58,11 +59,13 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             }
           );
           const data = await res.json();
+          const user = data.data;
 
           if (data.status === "error") {
             throw new Error(data.message);
           }
-          return data.data.user;
+          setCookies(user.accessToken);
+          return user;
         } catch (error) {
           throw error;
         }
@@ -88,6 +91,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           user.id = data.user.id;
           user.accessToken = data.user.accessToken;
           user.refreshToken = data.user.refreshToken;
+          setCookies(data.user.accessToken);
+
           return true;
         } else {
           return false;
@@ -108,6 +113,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           user.id = data.user.id;
           user.accessToken = data.user.accessToken;
           user.refreshToken = data.user.refreshToken;
+          setCookies(data.user.accessToken);
+
           return true;
         } else {
           return false;
@@ -127,6 +134,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           user.id = data.user.id;
           user.accessToken = data.user.accessToken;
           user.refreshToken = data.user.refreshToken;
+          setCookies(data.user.accessToken);
+
           return true;
         } else {
           return false;
@@ -152,6 +161,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           user.id = data.user.id;
           user.accessToken = data.user.accessToken;
           user.refreshToken = data.user.refreshToken;
+          setCookies(data.user.accessToken);
+
           return true;
         } else {
           return false;
@@ -166,14 +177,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         if (exp) {
           const currentTime = new Date();
           if (currentTime.getTime() > exp * 1000) {
-            const data = await authApi.refreshToken(token.refreshToken);
-            const user = await authApi.getUser(data.accessToken);
+            const { accessToken } = await authApi.refreshToken(
+              token.refreshToken
+            );
+            const user = await authApi.getUser(accessToken);
+            
             console.log("Refresh token successfully");
             return {
               ...token,
               ...user,
-              accessToken: data.accessToken,
-              refreshToken: data.refreshToken,
+              accessToken: accessToken,
             };
           }
 
