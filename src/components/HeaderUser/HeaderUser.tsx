@@ -1,10 +1,8 @@
 "use client";
-import { IUser } from "@/features/apis/interfaces";
+import SwrProvider from "@/providers/SwrProvider";
 import Image from "next/image";
 import ButtonMain from "../ButtonMain";
 import MenuUser from "./components/MenuUser";
-import { SWRConfig } from "swr";
-import SwrProvider from "@/providers/SwrProvider";
 
 type Props = {};
 

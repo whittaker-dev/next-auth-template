@@ -1,5 +1,7 @@
+import HeaderLayout from "@/layouts/HeaderLayout";
+
 const Page = async () => {
-  return <div>dev page neeeeeee</div>;
+  return <HeaderLayout>dev page neeeeeee</HeaderLayout>;
 };
 
 export default Page;

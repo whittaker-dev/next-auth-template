@@ -54,7 +54,7 @@ const ButtonAuthSocial = React.memo(({ title, icon, type }: Props) => {
       console.log({ error });
       setLoading(false);
     }
-  }, [router, type]);
+  }, [router, type, returnUrl]);
   return (
     <div
       className={clsx(
