@@ -3,3 +3,46 @@
 @tailwind utilities;
 @layer utilities {
 }
+
+/********* Supply FONT ***************/
+@font-face {
+  font-family: "supply";
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+  src: url("../../public/fonts/supply/Supply-Light.otf") format("truetype");
+}
+
+@font-face {
+  font-family: "supply";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("../../public/fonts/supply/Supply-Regular.otf") format("truetype");
+}
+
+@font-face {
+  font-family: "supply";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../../public/fonts/supply/Supply-Medium.otf") format("truetype");
+}
+
+@font-face {
+  font-family: "supply";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("../../public/fonts/supply/Supply-Bold.otf") format("truetype");
+}
+
+/********* Flexible FONT ***************/
+@font-face {
+  font-family: "flexible";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("../../public/fonts/flexible/Flexible_Variable.ttf")
+    format("truetype");
+}

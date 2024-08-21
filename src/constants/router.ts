@@ -8,4 +8,6 @@ export const routerName = {
   settings: "/settings",
   billing: "/billing",
   readingList: "/reading-list",
+  subscriptions: "/subscriptions",
+  newFeeds: 'new-feeds'
 };

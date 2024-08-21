@@ -5,9 +5,8 @@ import { Montserrat } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { StoreProvider } from "./StoreProvider";
-import "./globals.css";
 import "react-loading-skeleton/dist/skeleton.css";
-import { SWRConfig } from "swr";
+import "./globals.css";
 
 const montserrat = Montserrat({
   subsets: ["latin"],

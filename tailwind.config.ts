@@ -24,6 +24,9 @@ const config: Config = {
       },
       fontFamily: {
         montserrat: ["var(--font-montserrat)"],
+        supply: ["supply"],
+        integralCF: ["IntegralCF"],
+        flexible: ["flexible"],
       },
       colors: {
         black: "#000",
