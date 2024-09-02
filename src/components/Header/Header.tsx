@@ -13,12 +13,12 @@ const Header = async (props: Props) => {
   return (
     <header className="fixed left-0 right-0 top-0 z-[9999] bg-green-primary-200 px-[5%] lg:px-[10%] py-4 flex items-center justify-between border-b border-solid border-b-slate-200">
       <div className="flex items-center justify-start gap-6">
-        <Link href={routerName.init} className="header-logo relative w-16 h-8">
+        <Link href={routerName.init} className="header-logo relative w-12 h-12">
           <Image
-            src={"/images/logo-app.jpg"}
+            src={"/images/logo-trysomethign.png"}
             alt="logo-app"
             fill
-            className="object-cover"
+            className="object-contain"
           />
         </Link>
         <div className="header-search relative ">

@@ -129,6 +129,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           name: (profile?.global_name as string) ?? "",
           provider: EAuthProvider.Discord,
         });
+
+        console.log("data", data);
+
         if (data?.status !== "error") {
           // **** Custom data user to JWT callbacks
           user.id = data.user.id;
@@ -181,7 +184,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               token.refreshToken
             );
             const user = await authApi.getUser(accessToken);
-            
+
             console.log("Refresh token successfully");
             return {
               ...token,
